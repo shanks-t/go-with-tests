@@ -2,10 +2,15 @@ package main
 
 import "fmt"
 
+const englishHelloPrefix = "Hello, "
+
 func main() {
-	fmt.Println(Hello("world"))
+	fmt.Println(Hello("Trey"))
 }
 
 func Hello(name string) string {
-	return "Hello, " + name
+	if name == "" {
+		name = "Worldd"
+	}
+	return englishHelloPrefix + name
 }
