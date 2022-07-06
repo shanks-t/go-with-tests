@@ -1,7 +1,10 @@
 go 1.18
 
 use (
+	./arrays_and_slices
 	./hello
 	./integers
+	./interfaces
 	./iteration
+	./stringMethods
 )
