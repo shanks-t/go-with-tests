@@ -30,10 +30,12 @@ func (w *Wallet) Balance() Dogecoin {
 	return w.balance
 }
 
+var ErrInsufficientFunds = errors.New("cannot withdraw, insufficient funds")
+
 func (w *Wallet) Withdraw(amount Dogecoin) error {
 
 	if amount > w.balance {
-		return errors.New("you're outa money, bro")
+		return ErrInsufficientFunds
 	}
 
 	w.balance -= amount
