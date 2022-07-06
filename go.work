@@ -6,5 +6,6 @@ use (
 	./integers
 	./interfaces
 	./iteration
+	./pointers_and_errors
 	./stringMethods
 )
