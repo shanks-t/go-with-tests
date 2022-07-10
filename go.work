@@ -11,5 +11,6 @@ use (
 	./maps_baby
 	./mocking
 	./pointers_and_errors
+	./select
 	./stringMethods
 )
