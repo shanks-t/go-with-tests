@@ -2,11 +2,13 @@ go 1.18
 
 use (
 	./arrays_and_slices
+	./dependency_injection
 	./hello
 	./integers
 	./interfaces
 	./iteration
 	./maps_baby
+	./mocking
 	./pointers_and_errors
 	./stringMethods
 )
