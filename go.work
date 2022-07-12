@@ -11,6 +11,7 @@ use (
 	./maps_baby
 	./mocking
 	./pointers_and_errors
+	./property_based_tests
 	./reflection
 	./select
 	./stringMethods
