@@ -19,25 +19,32 @@ func ConvertToRoman(arabicNum int) string {
 
 	var result strings.Builder
 
-	for arabicNum > 0 {
-		switch {
-		case arabicNum > 9:
-			result.WriteString("X")
-			arabicNum -= 10
-		case arabicNum > 8:
-			result.WriteString("IX")
-			arabicNum -= 9
-		case arabicNum > 4:
-			result.WriteString("V")
-			arabicNum -= 5
-		case arabicNum > 3:
-			result.WriteString("IV")
-			arabicNum -= 4
-		default:
-			result.WriteString("I")
-			arabicNum--
+	for _, numeral := range allRomanNumerals {
+		for arabicNum >= numeral.Value {
+			result.WriteString(numeral.Symbol)
+			arabicNum -= numeral.Value
 		}
 	}
+
+	// for arabicNum > 0 {
+	// 	switch {
+	// 	case arabicNum > 9:
+	// 		result.WriteString("X")
+	// 		arabicNum -= 10
+	// 	case arabicNum > 8:
+	// 		result.WriteString("IX")
+	// 		arabicNum -= 9
+	// 	case arabicNum > 4:
+	// 		result.WriteString("V")
+	// 		arabicNum -= 5
+	// 	case arabicNum > 3:
+	// 		result.WriteString("IV")
+	// 		arabicNum -= 4
+	// 	default:
+	// 		result.WriteString("I")
+	// 		arabicNum--
+	// 	}
+	// }
 
 	// for i := arabicNum; i > 0; i-- {
 	// 	if arabicNum == 5 {
