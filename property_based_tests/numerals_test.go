@@ -1,34 +1,51 @@
 package propertybasedtests
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestRomanNumerals(t *testing.T) {
 	cases := []struct {
-		Description string
-		ArabicNum   int
-		Want        string
+		ArabicNum int
+		Roman     string
 	}{
-		{"1 gets converted to I", 1, "I"},
-		{"2 gets converted to II", 2, "II"},
-		{"3 gets converted to III", 3, "III"},
-		{"4 gets converted to IV (can't repeat more than 3 times)", 4, "IV"},
-		{"5 gets converted to V", 5, "V"},
-		{"6 gets converted to V", 6, "VI"},
-		{"7 gets converted to V", 7, "VII"},
-		{"8 gets converted to V", 8, "VIII"},
-		{"9 gets converted to IX", 9, "IX"},
-		{"10 gets converted to X", 10, "X"},
-		{"14 gets converted to XIV", 14, "XIV"},
-		{"18 gets converted to XVIII", 18, "XVIII"},
-		{"20 gets converted to XX", 20, "XX"},
-		{"39 gets converted to XXXIX", 39, "XXXIX"},
+		{ArabicNum: 1, Roman: "I"},
+		{ArabicNum: 2, Roman: "II"},
+		{ArabicNum: 3, Roman: "III"},
+		{ArabicNum: 4, Roman: "IV"},
+		{ArabicNum: 5, Roman: "V"},
+		{ArabicNum: 6, Roman: "VI"},
+		{ArabicNum: 7, Roman: "VII"},
+		{ArabicNum: 8, Roman: "VIII"},
+		{ArabicNum: 9, Roman: "IX"},
+		{ArabicNum: 10, Roman: "X"},
+		{ArabicNum: 14, Roman: "XIV"},
+		{ArabicNum: 18, Roman: "XVIII"},
+		{ArabicNum: 20, Roman: "XX"},
+		{ArabicNum: 39, Roman: "XXXIX"},
+		{ArabicNum: 40, Roman: "XL"},
+		{ArabicNum: 47, Roman: "XLVII"},
+		{ArabicNum: 49, Roman: "XLIX"},
+		{ArabicNum: 50, Roman: "L"},
+		{ArabicNum: 100, Roman: "C"},
+		{ArabicNum: 90, Roman: "XC"},
+		{ArabicNum: 400, Roman: "CD"},
+		{ArabicNum: 500, Roman: "D"},
+		{ArabicNum: 900, Roman: "CM"},
+		{ArabicNum: 1000, Roman: "M"},
+		{ArabicNum: 1984, Roman: "MCMLXXXIV"},
+		{ArabicNum: 3999, Roman: "MMMCMXCIX"},
+		{ArabicNum: 2014, Roman: "MMXIV"},
+		{ArabicNum: 1006, Roman: "MVI"},
+		{ArabicNum: 798, Roman: "DCCXCVIII"},
 	}
 
 	for _, test := range cases {
-		t.Run(test.Description, func(t *testing.T) {
+		t.Run(fmt.Sprintf("%d gets converted to %s", test.ArabicNum, test.Roman), func(t *testing.T) {
 			got := ConvertToRoman(test.ArabicNum)
-			if got != test.Want {
-				t.Errorf("got %q want %q", got, test.Want)
+			if got != test.Roman {
+				t.Errorf("got: %q want: %q", got, test.Roman)
 			}
 		})
 	}
