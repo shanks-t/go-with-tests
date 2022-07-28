@@ -6,6 +6,17 @@ type RomanNumeral struct {
 	Value  int
 	Symbol string
 }
+type RomanNumerals []RomanNumeral
+
+func (r RomanNumerals) ValueOf(symbol string) int {
+	for _, s := range r {
+		if s.Symbol == symbol {
+			return s.Value
+		}
+	}
+
+	return 0
+}
 
 var allRomanNumerals = []RomanNumeral{
 	{1000, "M"},
@@ -68,4 +79,13 @@ func ConvertToRoman(arabicNum int) string {
 
 	return result.String()
 
+}
+
+func ConvertToArabic(romanNum string) int {
+	total := 0
+
+	for range romanNum {
+		total++
+	}
+	return total
 }
