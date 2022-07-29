@@ -4,6 +4,7 @@ use (
 	./arrays_and_slices
 	./concurrency
 	./dependency_injection
+	./hamming
 	./hello
 	./integers
 	./interfaces
