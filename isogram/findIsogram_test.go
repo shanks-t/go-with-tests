@@ -15,8 +15,9 @@ var (
 		{phrase: "ten-year-old", ans: false},
 		{phrase: "six-year-old", ans: true},
 		{phrase: "Capital-c", ans: false},
-		{phrase: "Coolguy-c", ans: false},
-		{phrase: "Coolguy c", ans: false},
+		{phrase: "Coldguy-c", ans: false},
+		{phrase: "Coldguy c", ans: false},
+		{phrase: "1-Coldguy 1", ans: false},
 	}
 )
 
