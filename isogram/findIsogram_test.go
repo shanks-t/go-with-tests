@@ -6,21 +6,29 @@ import (
 )
 
 var (
-	cases = []string{
-		"lumberjacks",
-		"pump",
+	testCases = []struct {
+		phrase string
+		ans    bool
+	}{
+		{phrase: "lumberjacks", ans: true},
+		{phrase: "pump", ans: false},
+		{phrase: "ten-year-old", ans: false},
+		{phrase: "six-year-old", ans: true},
+		{phrase: "Capital-c", ans: false},
+		{phrase: "Coolguy-c", ans: false},
+		{phrase: "Coolguy c", ans: false},
 	}
 )
 
 func TestFindIsogram(t *testing.T) {
-	for _, test := range cases {
+	for _, tc := range testCases {
 
-		t.Run(fmt.Sprintf("is %s an isogram", test), func(t *testing.T) {
-			got, _ := FindIsogram(string(test))
-			want := false
+		t.Run(fmt.Sprintf("is %s an isogram", tc.phrase), func(t *testing.T) {
+			got := FindIsogram(string(tc.phrase))
+			want := tc.ans
 
 			if got != want {
-				t.Errorf("got %v, want %v", got, want)
+				t.Errorf("for %s, got %v, want %v", tc.phrase, got, want)
 			}
 		})
 	}

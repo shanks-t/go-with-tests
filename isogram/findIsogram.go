@@ -1,15 +1,20 @@
 package main
 
-import "strings"
+import (
+	"regexp"
+	"strings"
+)
 
-func FindIsogram(phrase string) (bool, error) {
-	var res bool
+func FindIsogram(phrase string) bool {
+	phrase = strings.ToLower(phrase)
+	isAlpha := regexp.MustCompile(`^[A-Za-z]+$`).MatchString
 	for i := 0; i < len(phrase); i++ {
-		res = strings.Contains(phrase, string(phrase[i]))
-		print(string(phrase[i]))
-		if res {
-			return false, nil
+		if isAlpha(string(phrase[i])) {
+			res := strings.Contains(phrase[i+1:], string(phrase[i]))
+			if res {
+				return false
+			}
 		}
 	}
-	return true, nil
+	return true
 }
