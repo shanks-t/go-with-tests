@@ -8,6 +8,7 @@ use (
 	./hello
 	./integers
 	./interfaces
+	./isogram
 	./iteration
 	./maps_baby
 	./mocking
