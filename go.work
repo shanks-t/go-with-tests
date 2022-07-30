@@ -12,6 +12,7 @@ use (
 	./iteration
 	./maps_baby
 	./mocking
+	./moreConcurrency
 	./pointers_and_errors
 	./property_based_tests
 	./reflection
