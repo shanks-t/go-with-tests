@@ -4,13 +4,19 @@ use (
 	./arrays_and_slices
 	./concurrency
 	./dependency_injection
+	./hamming
 	./hello
 	./integers
 	./interfaces
+	./isogram
 	./iteration
 	./maps_baby
 	./mocking
+	./moreConcurrency
 	./pointers_and_errors
+	./property_based_tests
+	./reflection
 	./select
 	./stringMethods
+	./sync
 )
