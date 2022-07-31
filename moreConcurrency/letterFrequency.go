@@ -8,9 +8,6 @@ import (
 // FreqMap records the frequency of each rune in a given text.
 type FreqMap map[rune]int
 
-// current processs
-type StringChecker func(string) FreqMap
-
 // Frequency counts the frequency of each rune in a given text and returns this
 // data as a FreqMap.
 
@@ -22,11 +19,15 @@ func Frequency(s string) FreqMap {
 			m[r]++
 		}
 	}
+	// res := make(map[string]int)
+	// for k, v := range m {
+	// 	res[string(k)] = v
+	// }
 	return m
 }
 
 func ConcurrentFrequency(l []string) FreqMap {
-	res := FreqMap{}
+	m := FreqMap{}
 	ch := make(chan FreqMap, 10)
 
 	var wg sync.WaitGroup
@@ -46,8 +47,9 @@ func ConcurrentFrequency(l []string) FreqMap {
 
 	for FreqMap := range ch {
 		for letter, freq := range FreqMap {
-			res[letter] += freq
+			m[letter] += freq
 		}
 	}
-	return res
+
+	return m
 }

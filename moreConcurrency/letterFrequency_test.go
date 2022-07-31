@@ -26,23 +26,24 @@ func getSequenceTexts(texts ...string) string {
 	return seq
 }
 func getSliceTexts(texts ...string) []string {
-	var routines []string
 	for _, text := range texts {
 		chunk, err := os.ReadFile(text)
 		check(err)
 		chunks = append(chunks, string(chunk))
 	}
-	return routines
+	return chunks
 }
 func BenchmarkFrequency(b *testing.B) {
 	total_texts := getSequenceTexts(texts...)
 	//getSequenceTexts(texts...)
 
-	Frequency(total_texts)
+	res := Frequency(total_texts)
+	b.Log("sequential", res)
 }
 
 func BenchmarkConcurrentFrequency(b *testing.B) {
 	routines := getSliceTexts(texts...)
 
-	ConcurrentFrequency(routines)
+	res := ConcurrentFrequency(routines)
+	b.Log("concurrent", res)
 }
