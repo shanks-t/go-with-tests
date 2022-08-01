@@ -3,12 +3,12 @@ package propertybasedtests
 import "strings"
 
 type RomanNumeral struct {
-	Value  int
+	Value  uint16
 	Symbol string
 }
 type RomanNumerals []RomanNumeral
 
-func (r RomanNumerals) ValueOf(symbols ...byte) int {
+func (r RomanNumerals) ValueOf(symbols ...byte) uint16 {
 	symbol := string(symbols)
 	for _, s := range r {
 		if s.Symbol == symbol {
@@ -35,7 +35,7 @@ var allRomanNumerals = RomanNumerals{
 	{1, "I"},
 }
 
-func ConvertToRoman(arabicNum int) string {
+func ConvertToRoman(arabicNum uint16) string {
 
 	var result strings.Builder
 
@@ -45,45 +45,12 @@ func ConvertToRoman(arabicNum int) string {
 			arabicNum -= numeral.Value
 		}
 	}
-
-	// for arabicNum > 0 {
-	// 	switch {
-	// 	case arabicNum > 9:
-	// 		result.WriteString("X")
-	// 		arabicNum -= 10
-	// 	case arabicNum > 8:
-	// 		result.WriteString("IX")
-	// 		arabicNum -= 9
-	// 	case arabicNum > 4:
-	// 		result.WriteString("V")
-	// 		arabicNum -= 5
-	// 	case arabicNum > 3:
-	// 		result.WriteString("IV")
-	// 		arabicNum -= 4
-	// 	default:
-	// 		result.WriteString("I")
-	// 		arabicNum--
-	// 	}
-	// }
-
-	// for i := arabicNum; i > 0; i-- {
-	// 	if arabicNum == 5 {
-	// 		result.WriteString("V")
-	// 		break
-	// 	}
-	// 	if arabicNum == 4 {
-	// 		result.WriteString("IV")
-	// 		break
-	// 	}
-	// 	result.WriteString("I")
-	// }
-
 	return result.String()
 
 }
 
-func ConvertToArabic(roman string) int {
-	total := 0
+func ConvertToArabic(roman string) uint16 {
+	var total uint16
 
 	for i := 0; i < len(roman); i++ {
 		symbol := roman[i]
