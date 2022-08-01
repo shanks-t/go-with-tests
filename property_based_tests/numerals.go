@@ -18,7 +18,7 @@ func (r RomanNumerals) ValueOf(symbol string) int {
 	return 0
 }
 
-var allRomanNumerals = []RomanNumeral{
+var allRomanNumerals = RomanNumerals{
 	{1000, "M"},
 	{900, "CM"},
 	{500, "D"},
