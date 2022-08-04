@@ -6,11 +6,40 @@ import (
 	"time"
 )
 
+// func homeHandler(w http.ResponseWriter, r *http.Request) {
+// 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+// 	fmt.Fprint(w, "<h1>Welcom to mah dope site!</h1>")
+// }
+
+// func contactHandler(w http.ResponseWriter, r *http.Request) {
+// 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+// 	fmt.Fprint(w, `<h1>Contact Page</h1><p>To get in touch, email me at <a
+//     href=\"mailto:shanksleslietrey@gmail.com\">shanksleslietrey@gmail.com</a>.`)
+// }
+
+// func pathHandler(w http.ResponseWriter, r *http.Request) {
+// 	switch r.URL.Path {
+// 	case "/":
+// 		homeHandler(w, r)
+// 	case "/contact":
+// 		contactHandler(w, r)
+// 	default:
+// 		w.WriteHeader(http.StatusNotFound)
+// 		fmt.Fprint(w, "Page not found")
+// 	}
+// }
+
+// func main() {
+// 	http.HandleFunc("/", pathHandler)
+// 	fmt.Println("Starting server on :3000...")
+// 	http.ListenAndServe(":3000", nil)
+// }
+
 type Interview interface {
 	askQuestion() []string
-	getDifficulty() int
+	getDifficulty(index int) int
 	source() string
-	getAssessment(answerQuality float32) float32
+	getAssessment(questionIndex int, answerQuality float32) float32
 }
 
 type Question struct {
@@ -35,12 +64,12 @@ func (i Interviewer) source() string {
 	return i.name
 }
 
-func (i Interviewer) getDifficulty() int {
-	return i.interviewQuestions[0].difficulty
+func (i Interviewer) getDifficulty(index int) int {
+	return i.interviewQuestions[index].difficulty
 }
 
-func (i Interviewer) getAssessment(answerQuality float32) float32 {
-	return float32(i.getDifficulty()) * float32(answerQuality)
+func (i Interviewer) getAssessment(questionIndex int, answerQuality float32) float32 {
+	return float32(i.getDifficulty(questionIndex)) * answerQuality
 }
 
 func conductInterview(i []Interview) []float32 {
@@ -53,7 +82,7 @@ func conductInterview(i []Interview) []float32 {
 		for i, q := range interview.askQuestion() {
 			time.Sleep(500 * time.Millisecond)
 			fmt.Printf("%d: %s\n", i+1, q)
-			assessment := interview.getAssessment(answerQuality)
+			assessment := interview.getAssessment(i, answerQuality)
 			assessmentOfAnswers = append(assessmentOfAnswers, assessment)
 			time.Sleep(2 * time.Second)
 			fmt.Printf("The impressiveness of your answer on a scale of 1 - 100 for question %d from %s: %v\n", i+1, interview.source(), assessment)
