@@ -1,3 +1,11 @@
+// reflections on ideas around di that came up in my interview
+package dependencyinjection
+
+import (
+	"fmt"
+	"time"
+)
+
 type Interview interface {
 	askQuestion() []string
 	getDifficulty() int
