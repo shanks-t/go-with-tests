@@ -1,5 +1,5 @@
 // reflections on ideas around di that came up in my interview
-package dependencyinjection
+package main
 
 import (
 	"fmt"
