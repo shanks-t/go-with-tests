@@ -1,8 +1,9 @@
 // reflections on ideas around di that came up in my interview
-package dependencyinjection
+package main
 
 import (
 	"fmt"
+	"math/rand"
 	"time"
 )
 
@@ -10,7 +11,7 @@ type Interview interface {
 	askQuestion() []string
 	getDifficulty(index int) int
 	source() string
-	getAssessment(questionIndex int, answerQuality float32) float32
+	//getAssessment(questionIndex int, answerQuality float32) float32
 }
 
 type Question struct {
@@ -21,6 +22,12 @@ type Question struct {
 type Interviewer struct {
 	name               string
 	interviewQuestions []Question
+}
+
+type Assessment struct {
+	sumOfWeights            float32
+	sumOfAnswersTimesWeight float32
+	sumQuestions            int
 }
 
 func (i Interviewer) askQuestion() []string {
@@ -39,38 +46,48 @@ func (i Interviewer) getDifficulty(index int) int {
 	return i.interviewQuestions[index].difficulty
 }
 
-func (i Interviewer) getAssessment(questionIndex int, answerQuality float32) float32 {
-	return float32(i.getDifficulty(questionIndex)) * answerQuality
-}
+// implement weighted average for scores
+// func (i Interviewer) getAssessment(questionIndex int, answerQuality float32) map[string]float32 {
+// 	//get sum of all weights
+// 	var sumOfWeights float32
+// 	var answerSumTimesWeight float32
+// 	sumOfWeights += float32(i.getDifficulty(questionIndex))
+// 	answerSumTimesWeight += float32(i.getDifficulty(questionIndex)) * answerQuality
+// 	answerMap := map[string]float32{
+// 		"sumOfWeights":         sumOfWeights,
+// 		"answerSumTimesWeight": answerSumTimesWeight,
+// 	}
+// 	return answerMap
+// }
 
-func conductInterview(i []Interview) []float32 {
-	const answerQuality float32 = 9.9
-	var assessmentOfAnswers []float32
+func conductInterview(i []Interview) bool {
+	a := Assessment{}
 	for _, interview := range i {
-
-		time.Sleep(1 * time.Second)
+		//time.Sleep(1 * time.Second)
 		fmt.Printf("Here are some questions from %s:\n", interview.source())
+
 		for i, q := range interview.askQuestion() {
-			time.Sleep(500 * time.Millisecond)
+			rand.Seed(int64(time.Now().Nanosecond()))
+			answerQuality := rand.Float32() * 10
+			a.sumQuestions++
 			fmt.Printf("%d: %s\n", i+1, q)
-			assessment := interview.getAssessment(i, answerQuality)
-			assessmentOfAnswers = append(assessmentOfAnswers, assessment)
-			time.Sleep(2 * time.Second)
-			fmt.Printf("The impressiveness of your answer on a scale of 1 - 100 for question %d from %s: %v\n", i+1, interview.source(), assessment)
+			fmt.Printf("answer quality: %v\n", answerQuality)
+			weightSum := float32(interview.getDifficulty(i))
+			a.sumOfWeights += weightSum
+			a.sumOfAnswersTimesWeight += (float32(weightSum) * answerQuality)
 		}
 	}
-	return assessmentOfAnswers
+	return findOutIfYouPassed(a)
 }
 
-func findOutIfYouPassed(assessments []float32) bool {
-	var score float32
-	var sum float32
+func findOutIfYouPassed(a Assessment) bool {
 	passed := false
-	for _, a := range assessments {
-		sum += a
-		score = sum / float32(len(assessments))
-	}
-	if score > 75 {
+	fmt.Printf("sumquestions: %v\n", a.sumQuestions)
+	weightedResult := a.sumOfAnswersTimesWeight / a.sumOfWeights
+	fmt.Printf("weighted result: %v\n", weightedResult)
+	fmt.Printf("sumOfAnswerTimesWeight: %v\n", a.sumOfAnswersTimesWeight)
+
+	if weightedResult > 5 {
 		passed = true
 	}
 	return passed
@@ -114,11 +131,11 @@ func main() {
 		},
 	}
 	interviewers := []Interview{interviewer1, interviewer2, interviewer3}
-	totalOfAssessment := conductInterview(interviewers)
+	didPass := conductInterview(interviewers)
 	fmt.Println("\n....interviewers are discussing your answers")
-	time.Sleep(3 * time.Second)
+	//time.Sleep(1 * time.Second)
 
-	if findOutIfYouPassed(totalOfAssessment) {
+	if didPass {
 		fmt.Println("\nYou Passed!")
 	} else {
 		fmt.Println("\nWe are not moving forward with you in the interview process. Thanks for applying and good luck!")
