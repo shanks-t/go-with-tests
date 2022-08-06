@@ -11,7 +11,6 @@ type Interview interface {
 	askQuestion() []string
 	getDifficulty(index int) int
 	source() string
-	//getAssessment(questionIndex int, answerQuality float32) float32
 }
 
 type Question struct {
@@ -46,35 +45,20 @@ func (i Interviewer) getDifficulty(index int) int {
 	return i.interviewQuestions[index].difficulty
 }
 
-// implement weighted average for scores
-// func (i Interviewer) getAssessment(questionIndex int, answerQuality float32) map[string]float32 {
-// 	//get sum of all weights
-// 	var sumOfWeights float32
-// 	var answerSumTimesWeight float32
-// 	sumOfWeights += float32(i.getDifficulty(questionIndex))
-// 	answerSumTimesWeight += float32(i.getDifficulty(questionIndex)) * answerQuality
-// 	answerMap := map[string]float32{
-// 		"sumOfWeights":         sumOfWeights,
-// 		"answerSumTimesWeight": answerSumTimesWeight,
-// 	}
-// 	return answerMap
-// }
-
-func conductInterview(i []Interview) bool {
+func ConductInterview(i []Interview) bool {
 	a := Assessment{}
 	for _, interview := range i {
-		//time.Sleep(1 * time.Second)
 		fmt.Printf("Here are some questions from %s:\n", interview.source())
 
 		for i, q := range interview.askQuestion() {
+			fmt.Printf("%d: %s\n", i+1, q)
 			rand.Seed(int64(time.Now().Nanosecond()))
 			answerQuality := rand.Float32() * 10
 			a.sumQuestions++
-			fmt.Printf("%d: %s\n", i+1, q)
-			fmt.Printf("answer quality: %v\n", answerQuality)
-			weightSum := float32(interview.getDifficulty(i))
-			a.sumOfWeights += weightSum
-			a.sumOfAnswersTimesWeight += (float32(weightSum) * answerQuality)
+			fmt.Printf("answer difficulty: %v \tanswer quality: %.2f\n", interview.getDifficulty(i), answerQuality)
+			questionWeight := float32(interview.getDifficulty(i))
+			a.sumOfWeights += questionWeight
+			a.sumOfAnswersTimesWeight += (float32(questionWeight) * answerQuality)
 		}
 	}
 	return findOutIfYouPassed(a)
@@ -82,14 +66,15 @@ func conductInterview(i []Interview) bool {
 
 func findOutIfYouPassed(a Assessment) bool {
 	passed := false
-	fmt.Printf("sumquestions: %v\n", a.sumQuestions)
 	weightedResult := a.sumOfAnswersTimesWeight / a.sumOfWeights
-	fmt.Printf("weighted result: %v\n", weightedResult)
-	fmt.Printf("sumOfAnswerTimesWeight: %v\n", a.sumOfAnswersTimesWeight)
-
-	if weightedResult > 5 {
+	fmt.Printf("\nYou answered %v questions, with a weighted average of %.2f\n", a.sumQuestions, weightedResult)
+	if weightedResult > 6 {
 		passed = true
+		fmt.Println("Excellent work, we'd like to invite you back for more hard questions!")
+	} else {
+		fmt.Println("\nWe are not moving forward with you in the interview process. Thanks for applying and good luck!")
 	}
+
 	return passed
 }
 
@@ -131,13 +116,5 @@ func main() {
 		},
 	}
 	interviewers := []Interview{interviewer1, interviewer2, interviewer3}
-	didPass := conductInterview(interviewers)
-	fmt.Println("\n....interviewers are discussing your answers")
-	//time.Sleep(1 * time.Second)
-
-	if didPass {
-		fmt.Println("\nYou Passed!")
-	} else {
-		fmt.Println("\nWe are not moving forward with you in the interview process. Thanks for applying and good luck!")
-	}
+	ConductInterview(interviewers)
 }
