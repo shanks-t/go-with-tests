@@ -3,6 +3,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"time"
 )
 
@@ -44,7 +45,7 @@ func (i Interviewer) getAssessment(questionIndex int, answerQuality float32) flo
 }
 
 func conductInterview(i []Interview) []float32 {
-	const answerQuality float32 = 9.9
+	answerQuality := rand.Float32() * 10
 	var assessmentOfAnswers []float32
 	for _, interview := range i {
 
