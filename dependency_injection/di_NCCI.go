@@ -45,15 +45,21 @@ func (i Interviewer) getDifficulty(index int) int {
 	return i.interviewQuestions[index].difficulty
 }
 
-func ConductInterview(i []Interview) bool {
+func GetAnswerQuality() float32 {
+	rand.Seed(int64(time.Now().Nanosecond()))
+	answerQuality := rand.Float32() * 10
+	return answerQuality
+}
+
+func ConductInterview(i []Interview) Assessment {
 	a := Assessment{}
 	for _, interview := range i {
 		fmt.Printf("Here are some questions from %s:\n", interview.source())
 
 		for i, q := range interview.askQuestion() {
 			fmt.Printf("%d: %s\n", i+1, q)
-			rand.Seed(int64(time.Now().Nanosecond()))
-			answerQuality := rand.Float32() * 10
+			//rand.Seed(int64(time.Now().Nanosecond()))
+			answerQuality := GetAnswerQuality()
 			a.sumQuestions++
 			fmt.Printf("answer difficulty: %v \tanswer quality: %.2f\n", interview.getDifficulty(i), answerQuality)
 			questionWeight := float32(interview.getDifficulty(i))
@@ -61,7 +67,7 @@ func ConductInterview(i []Interview) bool {
 			a.sumOfAnswersTimesWeight += (float32(questionWeight) * answerQuality)
 		}
 	}
-	return findOutIfYouPassed(a)
+	return a
 }
 
 func findOutIfYouPassed(a Assessment) bool {
@@ -116,5 +122,7 @@ func main() {
 		},
 	}
 	interviewers := []Interview{interviewer1, interviewer2, interviewer3}
-	ConductInterview(interviewers)
+	answers := ConductInterview(interviewers)
+	findOutIfYouPassed(answers)
+
 }
