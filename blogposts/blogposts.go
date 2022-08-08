@@ -1,12 +1,15 @@
 package blogposts
 
 import (
+	"bufio"
 	"io"
 	"io/fs"
+	"strings"
 )
 
 type Post struct {
-	Title string
+	Title       string
+	Description string
 }
 
 func NewPostsFromFS(fileSystem fs.FS) ([]Post, error) {
@@ -16,7 +19,7 @@ func NewPostsFromFS(fileSystem fs.FS) ([]Post, error) {
 	}
 	var posts []Post
 	for _, f := range dir {
-		post, err := getPost(fileSystem, f)
+		post, err := getPost(fileSystem, f.Name())
 		if err != nil {
 			return nil, err //todo: needs clarification should we fail totally if one file fails, or ignor
 		}
@@ -25,18 +28,26 @@ func NewPostsFromFS(fileSystem fs.FS) ([]Post, error) {
 	return posts, nil
 }
 
-func getPost(fileSystem fs.FS, f fs.DirEntry) (Post, error) {
-	postFile, err := fileSystem.Open(f.Name())
+func getPost(fileSystem fs.FS, fileName string) (Post, error) {
+	postFile, err := fileSystem.Open(fileName)
 	if err != nil {
 		return Post{}, err
 	}
 	defer postFile.Close()
+	return newPost(postFile)
+}
 
-	postData, err := io.ReadAll(postFile)
-	if err != nil {
-		return Post{}, err
+func newPost(postFile io.Reader) (Post, error) {
+	const (
+		titleSeparator       = "Title: "
+		descriptionSeparator = "Description: "
+	)
+	scanner := bufio.NewScanner(postFile)
+
+	readMetaLine := func(tagName string) string {
+		scanner.Scan()
+		return strings.TrimPrefix(scanner.Text(), tagName)
 	}
 
-	post := Post{Title: string(postData)[7:]}
-	return post, nil
+	return Post{Title: readMetaLine(titleSeparator), Description: readMetaLine(descriptionSeparator)}, nil
 }
