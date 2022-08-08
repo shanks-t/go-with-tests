@@ -39,11 +39,13 @@ func getPost(fileSystem fs.FS, fileName string) (Post, error) {
 func newPost(postFile io.Reader) (Post, error) {
 	scanner := bufio.NewScanner(postFile)
 
-	scanner.Scan()
-	titleLine := scanner.Text()
+	readLine := func() string {
+		scanner.Scan()
+		return scanner.Text()
+	}
 
-	scanner.Scan()
-	descriptionLine := scanner.Text()
+	title := readLine()[7:]
+	description := readLine()[13:]
 
-	return Post{Title: titleLine[7:], Description: descriptionLine[13:]}, nil
+	return Post{Title: title, Description: description}, nil
 }
