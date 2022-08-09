@@ -23,6 +23,11 @@ type Interviewer struct {
 	interviewQuestions []Question
 }
 
+type HiringManager struct {
+	name               string
+	interviewQuestions []Question
+}
+
 type Assessment struct {
 	sumOfWeights            float32
 	sumOfAnswersTimesWeight float32
@@ -37,12 +42,28 @@ func (i Interviewer) askQuestion() []string {
 	return questions
 }
 
+func (hm HiringManager) askQuestion() []string {
+	var questions []string
+	for _, question := range hm.interviewQuestions {
+		questions = append(questions, question.questionString)
+	}
+	return questions
+}
+
 func (i Interviewer) source() string {
 	return i.name
 }
 
+func (hm HiringManager) source() string {
+	return hm.name
+}
+
 func (i Interviewer) getDifficulty(index int) int {
 	return i.interviewQuestions[index].difficulty
+}
+
+func (hm HiringManager) getDifficulty(index int) int {
+	return hm.interviewQuestions[index].difficulty
 }
 
 func GetAnswerQuality() float32 {
@@ -109,7 +130,7 @@ func main() {
 			},
 		},
 	}
-	interviewer3 := Interviewer{
+	hiringManager1 := HiringManager{
 		name: "John", interviewQuestions: []Question{
 			{
 				questionString: "Explain a recent project you've done at your job",
@@ -121,7 +142,7 @@ func main() {
 			},
 		},
 	}
-	interviewers := []Interview{interviewer1, interviewer2, interviewer3}
+	interviewers := []Interview{interviewer1, interviewer2, hiringManager1}
 	answers := ConductInterview(interviewers)
 	findOutIfYouPassed(answers)
 
