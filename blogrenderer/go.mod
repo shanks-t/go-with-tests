@@ -1,3 +1,3 @@
 module github.com/shanks-t/go-with-tests/blogrenderer
 
-go 1.19
+go 1.26

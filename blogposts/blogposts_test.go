@@ -10,10 +10,10 @@ import (
 	blogposts "github.com/shanks-t/blogposts"
 )
 
-type StubFailingFS struct {
+type stubFailingFS struct {
 }
 
-func (s StubFailingFS) Open(name string) (fs.File, error) {
+func (s stubFailingFS) Open(name string) (fs.File, error) {
 	return nil, errors.New("oh no, i always fail")
 }
 
@@ -54,8 +54,25 @@ M`
 		Description: "Description 1",
 		Tags:        []string{"tdd", "go"},
 		Body: `Hello
-		World`,
+World`,
 	})
+
+	assertPost(t, posts[1], blogposts.Post{
+		Title:       "Post 2",
+		Description: "Description 2",
+		Tags:        []string{"rust", "borrow-checker"},
+		Body: `B
+L
+M`,
+	})
+}
+
+func TestNewBlogPostsReturnsAnErrorFromTheFileSystem(t *testing.T) {
+	_, err := blogposts.NewPostsFromFS(stubFailingFS{})
+
+	if err == nil {
+		t.Fatal("expected an error")
+	}
 }
 
 func assertPost(t *testing.T, got blogposts.Post, want blogposts.Post) {

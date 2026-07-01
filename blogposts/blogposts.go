@@ -31,7 +31,7 @@ func NewPostsFromFS(fileSystem fs.FS) ([]Post, error) {
 	for _, f := range dir {
 		post, err := getPost(fileSystem, f.Name())
 		if err != nil {
-			return nil, err //todo: needs clarification should we fail totally if one file fails, or ignor
+			return nil, err
 		}
 		posts = append(posts, post)
 	}
